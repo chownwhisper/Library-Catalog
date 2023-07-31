@@ -36,5 +36,5 @@ jobs:
       - name: Deploy to Render.com
         uses: johnbeynon/render-deploy-action@v0.0.8
         env:
-          RENDER_TOKEN: ${{ secrets.rnd_No3DJ6KUYsEDd35mQ7YvR4XCDjcp }}
-          SERVICE_ID: ${{ secrets.srv-cj3msjh8g3n1jkns69kg }}
+          RENDER_TOKEN: ${{ secrets.RENDER_TOKEN}}
+          SERVICE_ID: ${{ secrets.SERVICE_ID }}
