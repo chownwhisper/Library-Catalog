@@ -1,40 +1,71 @@
-name: CI/CD Workflow
+nname: CI/CD Pipeline
 
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   build:
-    # ...
-
-  test:
-    # ...
-
-  deploy:
-    needs: test
+    name: Build
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Node.js
+      - name: Use Node.js 18
         uses: actions/setup-node@v2
         with:
-          node-version: '18'
+          node-version: 18
 
       - name: Install dependencies
         run: npm install
 
-      - name: Build application (if present)
+      - name: Build the app
         run: npm run build --if-present
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Run tests
         run: npm test
 
+  deploy:
+    name: Deploy to Render.com
+    needs: [test]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Use Node.js 18
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the app
+        run: npm run build --if-present
+
       - name: Deploy to Render.com
         uses: johnbeynon/render-deploy-action@v0.0.8
-        env:
-          RENDER_TOKEN: ${{ secrets.RENDER_TOKEN}}
-          SERVICE_ID: ${{ secrets.SERVICE_ID }}
+        with:
+          render_token: ${{ secrets.RENDER_TOKEN }}
+          render_service_id: ${{ secrets.SERVICE_ID }}
