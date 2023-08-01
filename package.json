@@ -4,8 +4,7 @@
   "description": "Online Book Library Single Page Application",
   "main": "index.html",
   "scripts": {
-    "test": "npm run install-and-test",
-    "install-and-test": "npm install && npm run test:ui",
+    "test": "npm run test:ui",
     "test:ui": "mocha tests/ui.test.js",
     "start": "http-server -a localhost -p 3000 -c-1"
   },
@@ -26,4 +25,3 @@
     "node": "18.x"
   }
 }
-
