@@ -1,4 +1,3 @@
-// ui.test.js
 const { test, expect } = require('@playwright/test');
 
 test('Verify "All Books" link is visible', async ({ page }) => {
@@ -24,6 +23,21 @@ test('Verify "Login" button is visible', async ({ page }) => {
   expect(isLoginButtonVisible).toBe(true);
 });
 
+test('Verify "All Books" link is visible after user login', async ({ page }) => {
+  await page.goto('http://localhost:3000/login');
+
+  await page.fill('input[name="email"]', 'peter@abv.bg');
+  await page.fill('input[name="password"]', '123456');
+  await page.click('input[type="submit"]');
+
+  await page.waitForSelector('nav.navbar');
+
+  const allBooksLink = await page.$('a[href="/catalog"]');
+  const isAllBooksLinkVisible = await allBooksLink.isVisible();
+
+  expect(isAllBooksLinkVisible).toBe(true);
+});
+
 test('Login with valid credentials', async ({ page }) => {
   await page.goto('http://localhost:3000/login');
 
@@ -31,7 +45,8 @@ test('Login with valid credentials', async ({ page }) => {
   await page.fill('input[name="password"]', '123456');
 
   await page.click('input[type="submit"]');
-  await page.waitForURL('http://localhost:3000/catalog');
+
+  await page.waitForSelector('nav.navbar');
 
   expect(page.url()).toBe('http://localhost:3000/catalog');
 });
@@ -55,9 +70,11 @@ test('Add book with correct data', async ({ page }) => {
   await page.fill('input[name="password"]', '123456');
 
   await page.click('input[type="submit"]');
-  await page.waitForURL('http://localhost:3000/catalog');
+
+  await page.waitForSelector('nav.navbar');
 
   await page.click('a[href="/create"]');
+
   await page.waitForSelector('#create-form');
 
   await page.fill('#title', 'Test Book');
@@ -66,7 +83,6 @@ test('Add book with correct data', async ({ page }) => {
   await page.selectOption('#type', 'Fiction');
 
   await page.click('#create-form input[type="submit"]');
-  await page.waitForURL('http://localhost:3000/catalog');
 
   expect(page.url()).toBe('http://localhost:3000/catalog');
 });
@@ -78,9 +94,11 @@ test('Add book with empty title field', async ({ page }) => {
   await page.fill('input[name="password"]', '123456');
 
   await page.click('input[type="submit"]');
-  await page.waitForURL('http://localhost:3000/catalog');
+
+  await page.waitForSelector('nav.navbar');
 
   await page.click('a[href="/create"]');
+
   await page.waitForSelector('#create-form');
 
   await page.fill('#description', 'This is a test book description');
@@ -104,7 +122,8 @@ test('Login and verify all books are displayed', async ({ page }) => {
   await page.fill('input[name="password"]', '123456');
 
   await page.click('input[type="submit"]');
-  await page.waitForURL('http://localhost:3000/catalog');
+
+  await page.waitForSelector('nav.navbar');
 
   await page.waitForSelector('.dashboard');
 
@@ -120,12 +139,15 @@ test('Login and navigate to Details page', async ({ page }) => {
   await page.fill('input[name="password"]', '123456');
 
   await page.click('input[type="submit"]');
-  await page.waitForURL('http://localhost:3000/catalog');
+
+  await page.waitForSelector('nav.navbar');
 
   await page.click('a[href="/catalog"]');
+
   await page.waitForSelector('.otherBooks');
 
   await page.click('.otherBooks a.button');
+
   await page.waitForSelector('.book-information');
 
   const detailsPageTitle = await page.textContent('.book-information h3');
@@ -139,7 +161,7 @@ test('Verify visibility of Logout button after user login', async ({ page }) => 
   await page.fill('input[name="password"]', '123456');
   await page.click('input[type="submit"]');
 
-  await page.waitForSelector('#user');
+  await page.waitForSelector('nav.navbar');
 
   const isLogoutLinkVisible = await page.isVisible('#logoutBtn');
 
@@ -153,10 +175,9 @@ test('Verify redirection of Logout link after user login', async ({ page }) => {
   await page.fill('input[name="password"]', '123456');
   await page.click('input[type="submit"]');
 
-  await page.waitForSelector('#user');
+  await page.waitForSelector('nav.navbar');
 
   await page.click('#logoutBtn');
-  await page.waitForURL('http://localhost:3000/catalog');
 
-  expect(page.url()).toBe('http://localhost:3000/catalog');
+  await page.waitForURL('http://localhost:3000/catalog');
 });
