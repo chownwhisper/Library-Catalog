@@ -4,8 +4,9 @@
   "description": "Online Book Library Single Page Application",
   "main": "index.html",
   "scripts": {
-    "test": "npm run test:ui",
-    "test:ui": "mocha tests/ui.test.js",
+    "test": "npm run ci:test:setup",
+    "ci:test:setup": "npm install && npm run ci:test:ui",
+    "ci:test:ui": "mocha tests/ui.test.js",
     "start": "http-server -a localhost -p 3000 -c-1"
   },
   "author": "",
@@ -22,6 +23,6 @@
     "@playwright/test": "^1.12.2"
   },
   "engines": {
-    "node": "18.x"
+    "node": "14.x"
   }
 }
