@@ -1,9 +1,9 @@
-nname: CI/CD Pipeline
+name: Library Catalog
 
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build:
@@ -12,12 +12,13 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Use Node.js 18
-        uses: actions/setup-node@v2
+      - name: Use Node.js 18.x
+        uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 18.x
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm install
@@ -31,10 +32,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Use Node.js 18
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 18
 
@@ -46,7 +47,7 @@ jobs:
 
   deploy:
     name: Deploy to Render.com
-    needs: [test]
+    needs: [build, test]
     runs-on: ubuntu-latest
 
     steps:
@@ -67,5 +68,5 @@ jobs:
       - name: Deploy to Render.com
         uses: johnbeynon/render-deploy-action@v0.0.8
         with:
-          render_token: ${{ secrets.RENDER_TOKEN }}
-          render_service_id: ${{ secrets.SERVICE_ID }}
+          service-id: SERVICE_ID
+          api-key: RENDER_TOKEN
