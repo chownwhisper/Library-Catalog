@@ -1,4 +1,13 @@
+// ui.test.js
 const { test, expect } = require('@playwright/test');
+
+// Add this step to install the required package
+const { execSync } = require('child_process');
+try {
+  execSync('npm install @playwright/test --save-dev');
+} catch (err) {
+  console.error('Error installing @playwright/test:', err);
+}
 
 test('Verify "All Books" link is visible', async ({ page }) => {
   await page.goto('http://localhost:3000');
