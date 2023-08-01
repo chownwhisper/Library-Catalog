@@ -3,14 +3,13 @@ name: Continuous Integration
 on:
   push:
     branches:
-      - main
-
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Add build steps here, such as compiling assets, transpiling code, etc.
 
@@ -19,7 +18,7 @@ jobs:
     needs: build
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Add deployment steps here, such as deploying to a server, hosting service, etc.
 
@@ -28,10 +27,10 @@ jobs:
     needs: deploy
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
 
